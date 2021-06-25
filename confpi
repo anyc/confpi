@@ -1,0 +1,24 @@
+#! /bin/bash -e
+
+TGT="/boot/firmware/config.txt"
+CFG="$TGT.new"
+
+SCRIPTDIR="/etc/confpi.d"
+
+# DTOVERLAYS=()
+MODEL_LINES_4=()
+
+function add_line() {
+	echo $* >> "${CFG}"
+}
+
+echo "" > "${CFG}"
+
+for x in "${SCRIPTDIR}"/*.sh; do
+	[ -x "${x}" ] || continue
+	source "${x}"
+done
+
+[ ! -e "${TGT}" ] || mv "${TGT}" "${TGT}.bkp"
+
+mv "${CFG}" "${TGT}"
