@@ -1,53 +1,29 @@
+function add_model_settings() {
+	local model="$1"
+	local model_dir="${SCRIPTDIR}/pi${model}"
+	local -n model_lines="MODEL_LINES_${model}"
 
-echo -n "
-# RPi2-specific settings
-[pi2]
-" >> "${CFG}"
+	printf '\n# RPi%s-specific settings\n[pi%s]\n' "${model}" "${model}" >> "${CFG}"
 
-if [ -d "${SCRIPTDIR}"/pi2/ ]; then
-	for y in "${SCRIPTDIR}"/pi2/*.sh; do
-		[ -x "${y}" ] || continue
-		source "${y}"
-	done
-	
-	for line in "${MODEL_LINES_2[@]}"; do
-		add_line $line
-	done
-fi
+	if [ -d "${model_dir}" ]; then
+		for script in "${model_dir}"/*.sh; do
+			[ -x "${script}" ] || continue
+			source "${script}"
+		done
 
-echo -n "
-# RPi3-specific settings
-[pi3]
-" >> "${CFG}"
+		for line in "${model_lines[@]}"; do
+			add_line "${line}"
+		done
+	fi
+}
 
-if [ -d "${SCRIPTDIR}"/pi3/ ]; then
-	for y in "${SCRIPTDIR}"/pi3/*.sh; do
-		[ -x "${y}" ] || continue
-		source "${y}"
-	done
-	
-	for line in "${MODEL_LINES_3[@]}"; do
-		add_line $line
-	done
-fi
+for model_dir in "${SCRIPTDIR}"/pi[0-9]*/; do
+	[ -d "${model_dir}" ] || continue
+	model="${model_dir%/}"
+	model="${model##*/}"
+	model="${model#pi}"
+	[[ "${model}" =~ ^[0-9]+$ ]] || continue
+	add_model_settings "${model}"
+done
 
-echo -n "
-# RPi4-specific settings
-[pi4]
-" >> "${CFG}"
-
-if [ -d "${SCRIPTDIR}"/pi4/ ]; then
-	for y in "${SCRIPTDIR}"/pi4/*.sh; do
-		[ -x "${y}" ] || continue
-		source "${y}"
-	done
-	
-	for line in "${MODEL_LINES_4[@]}"; do
-		add_line $line
-	done
-fi
-
-echo -n "
-# reset filter
-[all]
-" >> "${CFG}"
+printf '\n# reset filter\n[all]\n' >> "${CFG}"
