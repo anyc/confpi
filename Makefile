@@ -13,15 +13,9 @@ install:
 	
 	$(INSTALL) -m 755 -d $(DESTDIR)$(sysconfdir)
 	$(INSTALL) -m 755 -d $(DESTDIR)$(sysconfdir)/confpi.d
-	$(INSTALL) -m 755 -d $(DESTDIR)$(sysconfdir)/confpi.d/pi2
-	$(INSTALL) -m 755 -d $(DESTDIR)$(sysconfdir)/confpi.d/pi3
-	$(INSTALL) -m 755 -d $(DESTDIR)$(sysconfdir)/confpi.d/pi4
 	
 	$(INSTALL) -m 755 -d $(DESTDIR)$(libexecdir)
 	$(INSTALL) -m 755 -d $(DESTDIR)$(libexecdir)/confpi.d
-	$(INSTALL) -m 755 -d $(DESTDIR)$(libexecdir)/confpi.d/pi2
-	$(INSTALL) -m 755 -d $(DESTDIR)$(libexecdir)/confpi.d/pi3
-	$(INSTALL) -m 755 -d $(DESTDIR)$(libexecdir)/confpi.d/pi4
 	
 	$(INSTALL) -m 755 confpi $(DESTDIR)$(bindir)
 	
